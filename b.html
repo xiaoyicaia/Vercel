@@ -257,7 +257,9 @@
 <script>
   document.getElementById('btnModel').addEventListener('click', function() {
     var pc = document.getElementById('pageC');
+    var content = document.querySelector('.page-b .content');
     pc.classList.toggle('show');
+    content.style.display = pc.classList.contains('show') ? 'none' : '';
   });
 </script>
 
