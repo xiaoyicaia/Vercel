@@ -118,6 +118,14 @@
   }
 
   /* ── g1 毛玻璃框内按钮 ── */
+  #g1 .glass-text {
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+    white-space: nowrap;
+    user-select: none;
+  }
   #g1 .glass-btn {
     padding: 10px 22px;
     font-size: 14px;
@@ -136,6 +144,37 @@
   #g1 .glass-btn:hover {
     background: rgba(255,255,255,0.1);
     color: #fff;
+  }
+
+  /* ── 页面 C ── */
+  .page-c {
+    position: absolute;
+    top: 150px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2300px;
+    padding: 40px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    color: rgba(255,255,255,0.85);
+    display: none;
+  }
+  .page-c.show {
+    display: block;
+  }
+  .page-c h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .page-c p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.6;
   }
 
   .page-b .content {
@@ -182,8 +221,8 @@
 
 <div class="page-b">
   <div class="top-glass" id="g1">
-    <button class="glass-btn">分类</button>
-    <button class="glass-btn">建模</button>
+    <span class="glass-text">分类</span>
+    <button class="glass-btn" id="btnModel">建模</button>
   </div>
   <div class="content">
     <h1>插件</h1>
@@ -191,6 +230,19 @@
     <div class="placeholder">内容待添加</div>
   </div>
 </div>
+
+<!-- 页面 C -->
+<div class="page-c" id="pageC">
+  <h2>建模</h2>
+  <p>建模相关内容待添加</p>
+</div>
+
+<script>
+  document.getElementById('btnModel').addEventListener('click', function() {
+    var pc = document.getElementById('pageC');
+    pc.classList.toggle('show');
+  });
+</script>
 
 </body>
 </html>
