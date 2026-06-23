@@ -95,12 +95,13 @@
     animation: fadeUp 1s ease 1s forwards;
   }
 
-  /* 顶部毛玻璃框 — 镜像左右边距到导航按钮下方 */
+  /* 顶部毛玻璃框 — 居中 */
   .page-b .top-glass {
     position: absolute;
     top: 80px;
-    right: 24px;
-    width: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(600px, calc(100% - 40px));
     height: 80px;
     display: flex; align-items: center; justify-content: center;
     background: rgba(255,255,255,0.06);
