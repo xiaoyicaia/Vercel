@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="data:,">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blender - 开源三维创作套件</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700;800;900&display=swap');
+
+  html, body {
+    height: 100%; overflow: hidden; margin: 0;
+  }
+  .pages-wrap {
+    height: 100%; width: 100%;
+    transition: transform 1.3s cubic-bezier(0.65, 0, 0.35, 1);
+    will-change: transform;
+  }
+  body {
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    background: #1a1a2e;
+  }
+
+  /* ── 导航栏 ── */
+  .navbar {
+    position: fixed; top: 20px; right: 24px; z-index: 100;
+    display: flex; align-items: center; gap: 4px;
+    padding: 6px 12px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+  .navbar a {
+    display: block;
+    padding: 8px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+  }
+  .navbar a:hover {
+    color: rgba(255,255,255,1);
+    background: rgba(255,255,255,0.08);
+  }
+  .navbar a.active {
+    color: #ea7600;
+    background: rgba(234,118,0,0.12);
+  }
+
+  /* ── 毛玻璃背景粒子 ── */
+  .bg-particles {
+    position: fixed; inset: 0; z-index: 0;
+    overflow: hidden;
+  }
+  .bg-particles span {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    animation: float 20s infinite ease-in-out;
+  }
+  .bg-particles span:nth-child(1) {
+    width: 400px; height: 400px;
+    background: #4a90d9;
+    top: -5%; left: -5%;
+    animation-delay: 0s;
+  }
+  .bg-particles span:nth-child(2) {
+    width: 350px; height: 350px;
+    background: #e67e22;
+    bottom: -5%; right: -5%;
+    animation-delay: -7s;
+  }
+  .bg-particles span:nth-child(3) {
+    width: 250px; height: 250px;
+    background: #2ecc71;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation-delay: -14s;
+  }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(60px, -40px) scale(1.1); }
+    50% { transform: translate(-30px, 60px) scale(0.9); }
+    75% { transform: translate(40px, 30px) scale(1.05); }
+  }
+
+  .page {
+    position: relative; z-index: 1;
+    height: 100vh; width: 100vw;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ══════ 第一页 ══════ */
+  #page1 {
+    flex-direction: column;
+  }
+
+  .hero {
+    display: flex; align-items: center; gap: 20px;
+  }
+
+  /* ── Logo ── */
+  .logo-wrap {
+    flex-shrink: 0;
+    opacity: 0;
+    transform: scale(0.1);
+    transition: none;
+  }
+  .logo-wrap.animate {
+    animation: logoGrow 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  @keyframes logoGrow {
+    0% { opacity: 0; transform: scale(0.1); }
+    60% { opacity: 1; transform: scale(1.15); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  .logo-wrap svg {
+    display: block;
+    width: 100px; height: 100px;
+  }
+
+  /* ── 字母 ── */
+  .letter-row {
+    display: flex;
+    font-size: clamp(64px, 10vw, 120px);
+    font-weight: 900;
+    color: rgba(255,255,255,0.92);
+    text-shadow: 0 0 40px rgba(74,144,217,0.3);
+    letter-spacing: 4px;
+  }
+  .letter-row .l {
+    opacity: 0;
+    transform: translateY(-60px);
+    transition: none;
+  }
+  .letter-row .l.show {
+    animation: letterDrop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  @keyframes letterDrop {
+    0% { opacity: 0; transform: translateY(-60px); }
+    60% { opacity: 1; transform: translateY(6px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .subtitle {
+    margin-top: 28px;
+    font-size: clamp(14px, 2vw, 20px);
+    font-weight: 400;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.8s forwards;
+  }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .scroll-hint {
+    position: absolute; bottom: 40px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: rgba(255,255,255,0.35);
+    font-size: 12px; letter-spacing: 2px;
+    opacity: 0;
+    animation: fadeUp 1s ease 2.4s forwards;
+  }
+  .scroll-hint .arrow {
+    width: 20px; height: 20px;
+    border-right: 2px solid rgba(255,255,255,0.35);
+    border-bottom: 2px solid rgba(255,255,255,0.35);
+    transform: rotate(45deg);
+    animation: bounceArrow 2s infinite;
+  }
+  @keyframes bounceArrow {
+    0%, 100% { transform: rotate(45deg) translate(0, 0); opacity: 0.35; }
+    50% { transform: rotate(45deg) translate(4px, 4px); opacity: 0.8; }
+  }
+
+  /* ══════ 第二页 ══════ */
+  #page2 {
+    flex-direction: column;
+    gap: 40px;
+    padding: 60px 20px;
+  }
+  #page2 .section-title {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 800;
+    color: rgba(255,255,255,0.9);
+    text-align: center;
+  }
+
+  .grid-6 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  /* ── 毛玻璃卡片 ── */
+  .glass-card {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 24px;
+    padding: 24px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    gap: 12px;
+
+    /* 毛玻璃 */
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    /* 光照立体感 */
+    box-shadow:
+      0 8px 32px rgba(0,0,0,0.3),
+      inset 0 1px 0 rgba(255,255,255,0.15),
+      inset 0 -1px 0 rgba(0,0,0,0.15);
+
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.4s ease;
+    cursor: default;
+  }
+  .glass-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow:
+      0 16px 48px rgba(0,0,0,0.4),
+      inset 0 1px 0 rgba(255,255,255,0.2),
+      inset 0 -1px 0 rgba(0,0,0,0.1);
+  }
+
+  /* 高光 */
+  .glass-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 24px;
+    background: radial-gradient(
+      ellipse at 30% 20%,
+      rgba(255,255,255,0.12) 0%,
+      transparent 60%
+    );
+    pointer-events: none;
+  }
+  /* 边缘光 */
+  .glass-card::after {
+    content: '';
+    position: absolute; inset: -1px;
+    border-radius: 25px;
+    background: linear-gradient(
+      135deg,
+      rgba(255,255,255,0.15) 0%,
+      transparent 40%,
+      transparent 60%,
+      rgba(255,255,255,0.05) 100%
+    );
+    mask: linear-gradient(#000, #000) content-box, linear-gradient(#000, #000);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+    pointer-events: none;
+  }
+
+  .glass-card .icon-wrap {
+    width: 56px; height: 56px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .glass-card .icon-wrap svg {
+    width: 48px; height: 48px;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.15));
+  }
+
+  .glass-card .fn-name {
+    font-size: clamp(18px, 2vw, 22px);
+    font-weight: 700;
+    color: rgba(255,255,255,0.92);
+  }
+  .glass-card .fn-desc {
+    font-size: clamp(11px, 1.1vw, 13px);
+    font-weight: 400;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.5;
+    max-width: 85%;
+  }
+
+  /* ── 淡入动画 ── */
+  .glass-card {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  .glass-card.visible {
+    animation: cardIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  @keyframes cardIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── 阈值线 ── */
+  #thresholdLine {
+    position: absolute;
+    top: 80vh; left: 0; width: 1px; height: 1px;
+    pointer-events: none; opacity: 0;
+  }
+
+  /* ── 滚动条 ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+
+  /* ── 响应式 ── */
+  @media (max-width: 768px) {
+    .grid-6 { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .hero { gap: 12px; }
+    .logo-wrap svg { width: 60px; height: 60px; }
+    .glass-card { padding: 16px; gap: 8px; }
+    .glass-card .icon-wrap { width: 40px; height: 40px; }
+    .glass-card .icon-wrap svg { width: 34px; height: 34px; }
+  }
+  @media (max-width: 480px) {
+    .grid-6 { grid-template-columns: 1fr 1fr; gap: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 导航栏 -->
+<nav class="navbar">
+  <a href="#" class="active">首页</a>
+  <a href="#">软件</a>
+  <a href="#">插件</a>
+  <a href="#">资产</a>
+</nav>
+
+<!-- 背景 -->
+<div class="bg-particles">
+  <span></span><span></span><span></span>
+</div>
+
+<div class="pages-wrap" id="pagesWrap">
+
+<!-- ═══ 第一页 ═══ -->
+<div class="page" id="page1">
+  <div class="hero">
+    <!-- Logo (官方 blender.org favicon SVG) -->
+    <div class="logo-wrap" id="logo">
+      <svg width="100" height="100" viewBox="0 0 629.36297 629.36297" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(-139.33227,-607.48591)">
+          <g transform="matrix(1,0,0,0.835201,7.78614,-42.9907)">
+            <g transform="matrix(4.16667,0,0,4.98882,-71.275919,2972.5463)">
+              <g transform="matrix(5.19226,0,0,5.19226,-1154.33,1375.29)">
+                <path d="m 243.13,-333.715 c 0.106,-1.891 1.032,-3.557 2.429,-4.738 1.37,-1.16 3.214,-1.869 5.226,-1.869 2.01,0 3.854,0.709 5.225,1.869 1.396,1.181 2.322,2.847 2.429,4.736 0.106,1.943 -0.675,3.748 -2.045,5.086 -1.397,1.361 -3.384,2.215 -5.609,2.215 -2.225,0 -4.216,-0.854 -5.612,-2.215 -1.371,-1.338 -2.15,-3.143 -2.043,-5.084 z" fill="#ffffff"/>
+              </g>
+              <g transform="matrix(2.66418,0,0,2.66418,-520.324,532.513)">
+                <path d="m 243.13,-333.715 c 0.106,-1.891 1.032,-3.557 2.429,-4.738 1.37,-1.16 3.214,-1.869 5.226,-1.869 2.01,0 3.854,0.709 5.225,1.869 1.396,1.181 2.322,2.847 2.429,4.736 0.106,1.943 -0.675,3.748 -2.045,5.086 -1.397,1.361 -3.384,2.215 -5.609,2.215 -2.225,0 -4.216,-0.854 -5.612,-2.215 -1.371,-1.338 -2.15,-3.143 -2.043,-5.084 z" fill="#265787"/>
+              </g>
+              <g transform="matrix(2.66418,0,0,2.66418,-520.324,532.513)">
+                <path d="m 230.94,-329.894 c 0.013,0.74 0.249,2.178 0.603,3.301 0.744,2.377 2.006,4.576 3.762,6.514 1.802,1.992 4.021,3.592 6.584,4.728 2.694,1.193 5.613,1.801 8.645,1.796 3.027,-0.004 5.946,-0.624 8.64,-1.826 2.563,-1.147 4.78,-2.754 6.579,-4.747 1.755,-1.946 3.015,-4.149 3.761,-6.526 0.375,-1.201 0.612,-2.42 0.707,-3.643 0.093,-1.205 0.054,-2.412 -0.117,-3.618 -0.334,-2.35 -1.147,-4.555 -2.399,-6.565 -1.145,-1.847 -2.621,-3.464 -4.376,-4.825 l 0.004,-0.003 -17.711,-13.599 c -0.016,-0.012 -0.029,-0.025 -0.046,-0.036 -1.162,-0.892 -3.116,-0.889 -4.394,0.005 -1.292,0.904 -1.44,2.399 -0.29,3.342 l -0.005,0.005 7.387,6.007 -22.515,0.024 h -0.03 c -1.861,0.002 -3.65,1.223 -4.004,2.766 -0.364,1.572 0.9,2.876 2.835,2.883 l -0.003,0.007 11.412,-0.022 -20.364,15.631 c -0.026,0.019 -0.054,0.039 -0.078,0.058 -1.921,1.471 -2.542,3.917 -1.332,5.465 1.228,1.574 3.839,1.577 5.78,0.009 l 11.114,-9.096 c 0,0 -0.162,1.228 -0.149,1.965 z m 28.559,4.112 c -2.29,2.333 -5.496,3.656 -8.965,3.663 -3.474,0.006 -6.68,-1.305 -8.97,-3.634 -1.119,-1.135 -1.941,-2.441 -2.448,-3.832 -0.497,-1.367 -0.69,-2.818 -0.562,-4.282 0.121,-1.431 0.547,-2.796 1.227,-4.031 0.668,-1.214 1.588,-2.311 2.724,-3.239 2.226,-1.814 5.06,-2.796 8.024,-2.8 2.967,-0.004 5.799,0.969 8.027,2.777 1.134,0.924 2.053,2.017 2.721,3.229 0.683,1.234 1.106,2.594 1.232,4.029 0.126,1.462 -0.067,2.911 -0.564,4.279 -0.508,1.395 -1.327,2.701 -2.446,3.841 z" fill="#ea7600"/>
+              </g>
+            </g>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <!-- 字母 -->
+    <div class="letter-row" id="letters"></div>
+  </div>
+
+  <p class="subtitle">开源三维创作套件</p>
+
+  <div class="scroll-hint">
+    <span>向下滚动了解更多</span>
+    <div class="arrow"></div>
+  </div>
+  <!-- 阈值线（不可见） -->
+  <div id="thresholdLine"></div>
+</div>
+
+<!-- ═══ 第二页 ═══ -->
+<div class="page" id="page2">
+  <h2 class="section-title">核心功能</h2>
+  <div class="grid-6" id="featureGrid"></div>
+</div>  <!-- end page2 -->
+</div>  <!-- end pagesWrap -->
+
+<script>
+  const word = 'blender';
+  const container = document.getElementById('letters');
+  word.split('').forEach((ch, i) => {
+    const span = document.createElement('span');
+    span.className = 'l';
+    span.textContent = ch;
+    container.appendChild(span);
+  });
+
+  const letters = container.querySelectorAll('.l');
+  letters.forEach((el, i) => {
+    setTimeout(() => el.classList.add('show'), i * 160);
+  });
+
+  /* ── Logo 动画 ── */
+  const logo = document.getElementById('logo');
+  setTimeout(() => logo.classList.add('animate'), 200);
+
+  /* ── 功能数据 ── */
+  const features = [
+    {
+      name: '雕刻',
+      desc: '数字粘土雕刻，支持多分辨率动态拓扑，打造细腻有机模型。',
+      paths: [
+        /* 立方体（左侧）*/
+        'M14 16 L26 20 L26 32 L14 36 L6 32 L6 20 Z',
+        'M14 16 L6 20 L14 23 L26 20 Z',
+        'M14 23 L14 36',
+      ],
+      extraSvg: '<g transform="matrix(-1,0,0,1,41,10) rotate(45)"><rect x="0" y="-2" width="22" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="2"/><path d="M22 -2 L30 0 L22 2 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><line x1="10" y1="-2" x2="10" y2="2" stroke="currentColor" stroke-width="1.5"/><line x1="22" y1="-2" x2="22" y2="2" stroke="currentColor" stroke-width="1.5"/></g>'
+    },
+    {
+      name: '着色器编辑器',
+      desc: '节点式材质编辑，可视化创建 PBR 纹理与程序化着色效果。',
+      paths: [
+        /* 画板 */
+        'M14 14 L50 14 L50 50 L14 50 Z',
+        /* 画架腿 */
+        'M32 50 L32 56',
+        'M24 56 L40 56',
+        /* 画板上的画 — 山 */
+        'M16 46 L24 30 L32 40 L40 26 L48 46 Z',
+        /* 太阳 */
+        'M42 18 A3 3 0 1 0 42 24 A3 3 0 1 0 42 18 Z',
+      ]
+    },
+    {
+      name: '动画',
+      desc: '全功能关键帧动画系统，支持曲线编辑、驱动与非线性编辑。',
+      paths: [
+        /* 小人（左右翻转180度） */
+        'M34 16 A3 3 0 1 0 34 22 A3 3 0 1 0 34 16 Z',
+        'M34 22 L34 36',
+        'M34 28 L42 22',
+        'M34 28 L26 22',
+        'M34 36 L42 46',
+        'M34 36 L26 46',
+        /* 风线 */
+        'M50 20 Q46 18 42 22',
+        'M52 28 Q46 24 40 28',
+        'M48 36 Q44 32 38 36',
+      ]
+    },
+    {
+      name: '骨骼',
+      desc: '高级骨骼绑定与蒙皮系统，轻松实现角色姿态控制与变形。',
+      paths: [],
+      extraSvg: '<g transform="scale(2.6667) translate(-1,-1)"><path d="M17 10c.7-.7 1.69 0 2.5 0a2.5 2.5 0 1 0 0-5 .5.5 0 0 1-.5-.5 2.5 2.5 0 1 0-5 0c0 .81.7 1.8 0 2.5l-7 7c-.7.7-1.69 0-2.5 0a2.5 2.5 0 0 0 0 5c.28 0 .5.22.5.5a2.5 2.5 0 1 0 5 0c0-.81-.7-1.8 0-2.5Z" fill="none" stroke="currentColor" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round"/></g>'
+    },
+    {
+      name: 'UV 编辑',
+      desc: '直观的 UV 展开与布局工具，无缝对接纹理绘制与贴图烘焙。',
+      paths: [
+        /* 展开的立方体展开图 */
+        'M10 14 L30 10 L50 14 L50 34 L30 38 L10 34 Z',
+        'M10 14 L10 34 L30 38 L30 18 Z',
+        'M30 18 L50 14 M30 38 L50 34',
+        'M30 18 L30 10 M30 38 L30 44',
+        'M10 34 L6 42 L26 46 L30 38',
+        'M50 34 L54 42 L34 46 L30 38',
+        'M30 44 L26 46 L34 46 Z',
+      ]
+    },
+    {
+      name: '渲染',
+      desc: 'Cycles 光线追踪与 Eevee 实时渲染双引擎，输出电影级画面。',
+      paths: [
+        /* 相机机身 */
+        'M18 28 L46 28 L48 46 L16 46 Z',
+        /* 闪光灯（左上，不超出本体） */
+        'M20 28 L20 24 L26 24 L26 28',
+        /* 镜头 */
+        'M26 34 A6 6 0 1 0 38 34 A6 6 0 1 0 26 34 Z',
+      ]
+    }
+  ];
+
+  const grid = document.getElementById('featureGrid');
+  const cards = [];
+  features.forEach((f, i) => {
+    const card = document.createElement('div');
+    card.className = 'glass-card';
+
+    /* SVG icon */
+    let svgContent = '';
+    f.paths.forEach(p => {
+      if (p.startsWith('circle')) {
+        const parts = p.split(' ');
+        svgContent += `<circle cx="${parts[1]}" cy="${parts[2]}" r="${parts[3]}" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+      } else {
+        svgContent += `<path d="${p}" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+      }
+    });
+    if (f.extraSvg) svgContent += f.extraSvg;
+
+    card.innerHTML = `
+      <div class="icon-wrap">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:rgba(255,255,255,0.85);">
+          ${svgContent}
+        </svg>
+      </div>
+      <div class="fn-name">${f.name}</div>
+      <div class="fn-desc">${f.desc}</div>
+    `;
+
+    grid.appendChild(card);
+    cards.push({el: card, idx: i});
+  });
+
+  /* 滚动触发卡片动画 — 观察每个卡片 */
+  const cardObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const idx = Number(e.target.dataset.index);
+        setTimeout(() => e.target.classList.add('visible'), idx * 120);
+        cardObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
+  cards.forEach(({el, idx}) => {
+    el.dataset.index = idx;
+    cardObserver.observe(el);
+  });
+
+  /* ── 整页滑动 ── */
+  let cp = 0;
+  const wrap = document.getElementById('pagesWrap');
+  let busy = false;
+  addEventListener('wheel', e => {
+    if (busy) return;
+    if (e.deltaY > 0 && cp === 0) { busy = true; cp = 1; wrap.style.transform = 'translateY(-100vh)'; setTimeout(()=>{busy=false},900); }
+    else if (e.deltaY < 0 && cp === 1) { busy = true; cp = 0; wrap.style.transform = 'translateY(0)'; setTimeout(()=>{busy=false},900); }
+  });
+  let ty = 0;
+  addEventListener('touchstart', e => { ty = e.changedTouches[0].screenY; });
+  addEventListener('touchend', e => {
+    const dy = ty - e.changedTouches[0].screenY;
+    if (Math.abs(dy) > innerHeight * 0.25) {
+      if (dy > 0 && cp === 0) { busy = true; cp = 1; wrap.style.transform = 'translateY(-100vh)'; setTimeout(()=>{busy=false},900); }
+      else if (dy < 0 && cp === 1) { busy = true; cp = 0; wrap.style.transform = 'translateY(0)'; setTimeout(()=>{busy=false},900); }
+    }
+  });
+</script>
+</body>
+</html>
