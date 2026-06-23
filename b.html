@@ -181,6 +181,14 @@
     border: 1px solid rgba(255,255,255,0.08);
     box-shadow: 0 8px 32px rgba(0,0,0,0.2);
     flex-shrink: 0;
+    overflow: hidden;
+    position: relative;
+  }
+  #z .z-img {
+    width: 100%;
+    height: 50%;
+    object-fit: cover;
+    display: block;
   }
 
   .page-b .content {
@@ -239,7 +247,9 @@
 
 <!-- 页面 C -->
 <div class="page-c" id="pageC">
-  <div class="c-card" id="z"></div>
+  <div class="c-card" id="z">
+    <img class="z-img" src="ref-img.png" alt="参考图">
+  </div>
   <h2>建模</h2>
   <p>建模相关内容待添加</p>
 </div>
