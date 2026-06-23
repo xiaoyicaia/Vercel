@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="data:,">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>软件 - Blender 生态</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    height: 100%; overflow: hidden;
+  }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #1a1a2e;
+    color: rgba(255,255,255,0.85);
+  }
+
+  /* ── 导航栏 ── */
+  .navbar {
+    position: fixed; top: 20px; right: 24px; z-index: 100;
+    display: flex; align-items: center; gap: 4px;
+    padding: 6px 12px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+  .navbar a {
+    display: block;
+    padding: 8px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+  }
+  .navbar a:hover {
+    color: rgba(255,255,255,1);
+    background: rgba(255,255,255,0.08);
+  }
+  .navbar a.active {
+    color: #ea7600;
+    background: rgba(234,118,0,0.12);
+  }
+
+  /* ── 背景 ── */
+  .bg-particles {
+    position: fixed; inset: 0; z-index: 0;
+    overflow: hidden;
+  }
+  .bg-particles span {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    animation: float 20s infinite ease-in-out;
+  }
+  .bg-particles span:nth-child(1) {
+    width: 400px; height: 400px;
+    background: #4a90d9;
+    top: -5%; left: -5%;
+    animation-delay: 0s;
+  }
+  .bg-particles span:nth-child(2) {
+    width: 350px; height: 350px;
+    background: #e67e22;
+    bottom: -5%; right: -5%;
+    animation-delay: -7s;
+  }
+  .bg-particles span:nth-child(3) {
+    width: 250px; height: 250px;
+    background: #2ecc71;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation-delay: -14s;
+  }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(60px, -40px) scale(1.1); }
+    50% { transform: translate(-30px, 60px) scale(0.9); }
+    75% { transform: translate(40px, 30px) scale(1.05); }
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── 页面 A 内容 ── */
+  .page-a {
+    position: relative; z-index: 1;
+    height: 100vh; width: 100vw;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px 20px;
+    opacity: 0;
+    animation: fadeUp 1s ease 1s forwards;
+  }
+
+  .page-a h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+  .page-a .sub {
+    font-size: clamp(14px, 2vw, 20px);
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 4px;
+    margin-bottom: 48px;
+  }
+  .page-a .placeholder {
+    padding: 24px 40px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.08);
+    font-size: 15px;
+    color: rgba(255,255,255,0.4);
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html">首页</a>
+  <a href="a.html" class="active">软件</a>
+  <a href="#">插件</a>
+  <a href="#">资产</a>
+</nav>
+
+<div class="bg-particles">
+  <span></span><span></span><span></span>
+</div>
+
+<div class="page-a">
+  <h1>软件</h1>
+  <p class="sub">Blender 相关软件生态</p>
+  <div class="placeholder">内容待添加</div>
+</div>
+
+</body>
+</html>
