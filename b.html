@@ -95,18 +95,18 @@
     animation: fadeUp 1s ease 1s forwards;
   }
 
-  /* 顶部毛玻璃框 — 撑满画布宽度 */
+  /* 顶部毛玻璃框 — 镜像左右边距到导航按钮下方 */
   .page-b .top-glass {
-    margin-top: 80px;
-    width: 100%;
-    max-width: 100%;
+    position: absolute;
+    top: 80px;
+    left: 24px;
+    right: 24px;
     height: 80px;
     display: flex; align-items: center; justify-content: center;
     background: rgba(255,255,255,0.06);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
-    border-top: 1px solid rgba(255,255,255,0.06);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
     box-shadow:
       0 8px 32px rgba(0,0,0,0.25),
       inset 0 1px 0 rgba(255,255,255,0.1);
