@@ -4,7 +4,7 @@
 <link rel="icon" href="data:,">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>软件 - Blender 生态</title>
+<title>插件 - Blender 生态</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -17,7 +17,6 @@
     color: rgba(255,255,255,0.85);
   }
 
-  /* ── 导航栏 ── */
   .navbar {
     position: fixed; top: 20px; right: 24px; z-index: 100;
     display: flex; align-items: center; gap: 4px;
@@ -45,7 +44,6 @@
     background: rgba(234,118,0,0.12);
   }
 
-  /* ── 背景 ── */
   .bg-particles {
     position: fixed; inset: 0; z-index: 0;
     overflow: hidden;
@@ -87,8 +85,7 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* ── 页面 A 内容 ── */
-  .page-a {
+  .page-b {
     position: relative; z-index: 1;
     height: 100vh; width: 100vw;
     display: flex; flex-direction: column;
@@ -98,18 +95,18 @@
     animation: fadeUp 1s ease 1s forwards;
   }
 
-  .page-a h1 {
+  .page-b h1 {
     font-size: clamp(32px, 5vw, 52px);
     font-weight: 800;
     margin-bottom: 12px;
   }
-  .page-a .sub {
+  .page-b .sub {
     font-size: clamp(14px, 2vw, 20px);
     color: rgba(255,255,255,0.5);
     letter-spacing: 4px;
     margin-bottom: 48px;
   }
-  .page-a .placeholder {
+  .page-b .placeholder {
     padding: 24px 40px;
     border-radius: 16px;
     background: rgba(255,255,255,0.05);
@@ -124,8 +121,8 @@
 
 <nav class="navbar">
   <a href="index.html">首页</a>
-  <a href="a.html" class="active">软件</a>
-  <a href="b.html">插件</a>
+  <a href="a.html">软件</a>
+  <a href="b.html" class="active">插件</a>
   <a href="#">资产</a>
 </nav>
 
@@ -133,9 +130,9 @@
   <span></span><span></span><span></span>
 </div>
 
-<div class="page-a">
-  <h1>软件</h1>
-  <p class="sub">Blender 相关软件生态</p>
+<div class="page-b">
+  <h1>插件</h1>
+  <p class="sub">Blender 插件生态</p>
   <div class="placeholder">内容待添加</div>
 </div>
 
