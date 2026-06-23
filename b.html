@@ -164,17 +164,21 @@
     display: none;
   }
   .page-c.show {
-    display: block;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 30px;
   }
-  .page-c h2 {
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 12px;
-  }
-  .page-c p {
-    font-size: 15px;
-    color: rgba(255,255,255,0.55);
-    line-height: 1.6;
+  .page-c .c-card {
+    width: 200px;
+    height: 200px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    flex-shrink: 0;
   }
 
   .page-b .content {
@@ -233,6 +237,7 @@
 
 <!-- 页面 C -->
 <div class="page-c" id="pageC">
+  <div class="c-card"></div>
   <h2>建模</h2>
   <p>建模相关内容待添加</p>
 </div>
