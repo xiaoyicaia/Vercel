@@ -153,6 +153,7 @@
     left: 50%;
     transform: translateX(-50%);
     width: 2300px;
+    bottom: 40px;
     padding: 40px;
     border-radius: 16px;
     background: rgba(255,255,255,0.04);
@@ -162,6 +163,7 @@
     box-shadow: 0 8px 32px rgba(0,0,0,0.2);
     color: rgba(255,255,255,0.85);
     display: none;
+    overflow-y: auto;
   }
   .page-c.show {
     display: flex;
@@ -169,7 +171,7 @@
     align-items: flex-start;
     gap: 30px;
   }
-  .page-c .c-card {
+  .page-c .c-card#z {
     width: 200px;
     height: 200px;
     border-radius: 16px;
@@ -237,7 +239,7 @@
 
 <!-- 页面 C -->
 <div class="page-c" id="pageC">
-  <div class="c-card"></div>
+  <div class="c-card" id="z"></div>
   <h2>建模</h2>
   <p>建模相关内容待添加</p>
 </div>
