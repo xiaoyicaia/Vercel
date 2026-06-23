@@ -17,30 +17,14 @@
     color: rgba(255,255,255,0.85);
   }
 
-  /* ── 顶部毛玻璃框 ── */
-  .top-bar {
-    position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
-    z-index: 100;
-    width: min(720px, calc(100% - 32px));
-    height: 52px;
-    display: flex; align-items: center; justify-content: center;
-    padding: 0 20px;
-    border-radius: 16px;
-    background: rgba(255,255,255,0.07);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.06);
+  .navbar {
+    position: fixed; top: 20px; right: 24px; z-index: 100;
+    display: flex; align-items: center; gap: 4px;
+    padding: 6px 12px;
     opacity: 0;
     animation: fadeUp 0.8s ease 0.6s forwards;
   }
-  .top-bar .navbar {
-    display: flex; align-items: center; gap: 2px;
-  }
-  .top-bar .navbar a {
-    display: flex; align-items: center; gap: 2px;
-  }
-  .top-bar .navbar a {
+  .navbar a {
     display: block;
     padding: 8px 18px;
     font-size: 14px;
@@ -105,10 +89,33 @@
     position: relative; z-index: 1;
     height: 100vh; width: 100vw;
     display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 40px 20px;
+    align-items: center;
+    padding: 0;
     opacity: 0;
     animation: fadeUp 1s ease 1s forwards;
+  }
+
+  /* 顶部毛玻璃框 — 居中适配画布 */
+  .page-b .top-glass {
+    margin-top: 40px;
+    width: min(900px, calc(100% - 40px));
+    height: 140px;
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow:
+      0 8px 32px rgba(0,0,0,0.25),
+      inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+
+  .page-b .content {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px 20px;
   }
 
   .page-b h1 {
@@ -135,24 +142,24 @@
 </head>
 <body>
 
-<!-- 顶部毛玻璃框 -->
-<div class="top-bar">
-  <nav class="navbar">
-    <a href="index.html">首页</a>
-    <a href="a.html">软件</a>
-    <a href="b.html" class="active">插件</a>
-    <a href="#">资产</a>
-  </nav>
-</div>
+<nav class="navbar">
+  <a href="index.html">首页</a>
+  <a href="a.html">软件</a>
+  <a href="b.html" class="active">插件</a>
+  <a href="#">资产</a>
+</nav>
 
 <div class="bg-particles">
   <span></span><span></span><span></span>
 </div>
 
 <div class="page-b">
-  <h1>插件</h1>
-  <p class="sub">Blender 插件生态</p>
-  <div class="placeholder">内容待添加</div>
+  <div class="top-glass"></div>
+  <div class="content">
+    <h1>插件</h1>
+    <p class="sub">Blender 插件生态</p>
+    <div class="placeholder">内容待添加</div>
+  </div>
 </div>
 
 </body>
