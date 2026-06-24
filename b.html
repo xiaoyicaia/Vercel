@@ -282,14 +282,15 @@
   document.getElementById('btnModel').addEventListener('click', function() {
     var pc = document.getElementById('pageC');
     var content = document.querySelector('.page-b .content');
-    pc.classList.toggle('show');
-    content.style.display = pc.classList.contains('show') ? 'none' : '';
+    if (!pc.classList.contains('show')) {
+      pc.classList.add('show');
+      content.style.display = 'none';
+    }
   });
 
   document.getElementById('z').onclick = function(e) {
     location.href = 'c.html';
   };
-  });
 </script>
 
 </body>
