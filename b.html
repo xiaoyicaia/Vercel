@@ -85,6 +85,10 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
   .page-b {
     position: relative; z-index: 1;
     height: 100vh; width: 100vw;
@@ -165,12 +169,14 @@
     display: none;
     overflow-y: auto;
     z-index: 10;
+    opacity: 0;
   }
   .page-c.show {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
     gap: 30px;
+    animation: fadeIn 1s ease forwards;
   }
   .page-c .c-card#z {
     width: 200px;
