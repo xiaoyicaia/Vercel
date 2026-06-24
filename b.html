@@ -245,7 +245,7 @@
 <nav class="navbar">
   <a href="index.html">首页</a>
   <a href="a.html">软件</a>
-  <a href="b.html" class="active">插件</a>
+  <a href="b.html?page=c" class="active">插件</a>
   <a href="#">资产</a>
 </nav>
 
@@ -291,6 +291,17 @@
   document.getElementById('z').onclick = function(e) {
     location.href = 'c.html';
   };
+
+  // 如果 URL 参数 ?page=c，自动展开 pageC
+  (function() {
+    var params = new URLSearchParams(location.search);
+    if (params.get('page') === 'c') {
+      var pc = document.getElementById('pageC');
+      var content = document.querySelector('.page-b .content');
+      pc.classList.add('show');
+      content.style.display = 'none';
+    }
+  })();
 </script>
 
 </body>
