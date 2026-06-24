@@ -164,6 +164,7 @@
     color: rgba(255,255,255,0.85);
     display: none;
     overflow-y: auto;
+    z-index: 10;
   }
   .page-c.show {
     display: flex;
@@ -285,8 +286,12 @@
     content.style.display = pc.classList.contains('show') ? 'none' : '';
   });
 
-  document.getElementById('z').addEventListener('click', function() {
-    location.href = 'c.html';
+  document.addEventListener('click', function(e) {
+    var el = e.target;
+    while (el) {
+      if (el.id === 'z') { location.href = 'c.html'; return; }
+      el = el.parentElement;
+    }
   });
 </script>
 
