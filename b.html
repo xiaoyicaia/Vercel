@@ -208,6 +208,8 @@
     margin-bottom: 4px;
   }
 
+  #z { cursor: pointer; }
+
   .page-b .content {
     flex: 1;
     display: flex; flex-direction: column;
@@ -264,7 +266,7 @@
 
 <!-- 页面 C -->
 <div class="page-c" id="pageC">
-  <div class="c-card" id="z" onclick="location.href='c.html'">
+  <div class="c-card" id="z">
     <img class="z-img" src="ref-img.png" alt="参考图">
     <div class="z-desc">
       <span class="name">DECALmachine 2.15.1</span>
@@ -281,6 +283,10 @@
     var content = document.querySelector('.page-b .content');
     pc.classList.toggle('show');
     content.style.display = pc.classList.contains('show') ? 'none' : '';
+  });
+
+  document.getElementById('z').addEventListener('click', function() {
+    location.href = 'c.html';
   });
 </script>
 
