@@ -286,12 +286,9 @@
     content.style.display = pc.classList.contains('show') ? 'none' : '';
   });
 
-  document.addEventListener('click', function(e) {
-    var el = e.target;
-    while (el) {
-      if (el.id === 'z') { location.href = 'c.html'; return; }
-      el = el.parentElement;
-    }
+  document.getElementById('z').onclick = function(e) {
+    location.href = 'c.html';
+  };
   });
 </script>
 
