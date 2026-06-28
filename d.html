@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="data:,">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quad Remesher Bridge - Blender 生态</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #1a1a2e;
+    color: rgba(255,255,255,0.85);
+  }
+
+  .navbar {
+    position: fixed; top: 20px; right: 24px; z-index: 100;
+    display: flex; align-items: center; gap: 4px;
+    padding: 6px 12px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+  .navbar a {
+    display: block;
+    padding: 8px 18px;
+    font-size: 14px; font-weight: 600;
+    color: rgba(255,255,255,0.75);
+    text-decoration: none; border-radius: 10px;
+    transition: all 0.25s ease; cursor: pointer;
+  }
+  .navbar a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+  .navbar a.active { color: #ea7600; background: rgba(234,118,0,0.12); }
+
+  .bg-particles {
+    position: fixed; inset: 0; z-index: 0; overflow: hidden;
+  }
+  .bg-particles span {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); opacity: 0.4;
+    animation: float 20s infinite ease-in-out;
+  }
+  .bg-particles span:nth-child(1) {
+    width: 400px; height: 400px; background: #4a90d9;
+    top: -5%; left: -5%; animation-delay: 0s;
+  }
+  .bg-particles span:nth-child(2) {
+    width: 350px; height: 350px; background: #e67e22;
+    bottom: -5%; right: -5%; animation-delay: -7s;
+  }
+  .bg-particles span:nth-child(3) {
+    width: 250px; height: 250px; background: #2ecc71;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    animation-delay: -14s;
+  }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(60px, -40px) scale(1.1); }
+    50% { transform: translate(-30px, 60px) scale(0.9); }
+    75% { transform: translate(40px, 30px) scale(1.05); }
+  }
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+  .page-c {
+    position: relative; z-index: 1;
+    height: 100vh; width: 100vw;
+    display: flex; flex-direction: column;
+    align-items: center;
+    padding: 80px 20px 40px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+    overflow-y: auto;
+  }
+
+  .glass-frame {
+    width: min(1200px, calc(100vw - 40px));
+    border-radius: 20px;
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .glass-frame .hero-img {
+    width: 100%;
+    display: block;
+  }
+  .glass-frame .hero-img img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .glass-frame .body-text {
+    padding: 40px;
+  }
+
+  .glass-frame h1 {
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 800;
+    margin-bottom: 6px;
+    color: rgba(255,255,255,0.92);
+  }
+  .glass-frame .version {
+    font-size: 14px;
+    color: #ea7600;
+    font-weight: 600;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+  }
+  .glass-frame .desc {
+    font-size: 15px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 28px;
+  }
+
+  .glass-frame .feat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+  .glass-frame .feat-item {
+    padding: 18px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .glass-frame .feat-item .tag {
+    font-size: 12px;
+    font-weight: 700;
+    color: #ea7600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .glass-frame .feat-item p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.65);
+  }
+  .glass-frame .feat-item.full {
+    grid-column: 1 / -1;
+  }
+
+  .glass-frame .footer {
+    padding: 20px 40px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+  }
+  .glass-frame .dl-btn {
+    display: inline-block;
+    padding: 14px 40px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(234,118,0,0.85);
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background 0.25s ease, transform 0.15s ease;
+    letter-spacing: 1px;
+  }
+  .glass-frame .dl-btn:hover {
+    background: rgba(234,118,0,1);
+    transform: scale(1.03);
+  }
+
+  @media (max-width: 640px) {
+    .glass-frame .feat-grid { grid-template-columns: 1fr; }
+    .glass-frame .body-text { padding: 24px; }
+    .glass-frame .footer { padding: 16px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html">首页</a>
+  <a href="a.html">软件</a>
+  <a href="b.html?page=c">插件</a>
+  <a href="#">资产</a>
+</nav>
+
+<div class="bg-particles">
+  <span></span><span></span><span></span>
+</div>
+
+<div class="page-c">
+  <div class="glass-frame">
+    <div class="hero-img">
+      <img src="quad-splash.png" alt="Quad Remesher Bridge">
+    </div>
+    <div class="body-text">
+      <h1>Quad Remesher Bridge</h1>
+      <div class="version">v1.3.2 — 智能四边形自动拓扑引擎</div>
+      <div class="desc">
+        Quad Remesher 是由 Exoside 开发的专业自动四边形重拓扑插件，采用先进的几何分析算法，
+        能够一键将三角面或杂乱的网格转换为规整的四边面，是硬表面建模、雕刻、3D 扫描后期处理不可或缺的效率工具。
+        插件结构分为前端 Python Bridge 和后端 Remeshing-Engine，支持 Blender 2.8 ~ 4.3+。
+      </div>
+      <div class="feat-grid">
+        <div class="feat-item">
+          <div class="tag">一键重拓扑</div>
+          <p>选择模型后一键生成高质量四边形网格，自动匹配曲率与细节密度，告别手动拓扑的繁琐工作流。</p>
+        </div>
+        <div class="feat-item">
+          <div class="tag">硬表面优化</div>
+          <p>针对硬表面模型的边缘保持算法，在倒角、折痕等关键区域精确保留结构线，确保后续细分平滑。</p>
+        </div>
+        <div class="feat-item">
+          <div class="tag">有机模型支持</div>
+          <p>对角色、生物等有机模型同样出色，自动生成规整四边拓扑，适合动画蒙皮与表情变形。</p>
+        </div>
+        <div class="feat-item">
+          <div class="tag">密度绘制</div>
+          <p>支持笔刷式的密度控制，在需要更多细节的区域增加面数，在平面区域减少面数，精准分配网格资源。</p>
+        </div>
+        <div class="feat-item">
+          <div class="tag">对称与面集</div>
+          <p>支持对称拓扑设置与 Face Sets 功能，保留 UV 接缝与材质分组信息，减少后期修复工作量。</p>
+        </div>
+        <div class="feat-item">
+          <div class="tag">多软件支持</div>
+          <p>除 Blender 外同时支持 3ds Max、Maya、Cinema 4D、ZBrush 等主流 DCC 工具，工作流无缝衔接。</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <a class="dl-btn" href="https://exoside.com" target="_blank" rel="noopener">下载 Quad Remesher 1.3.2</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
