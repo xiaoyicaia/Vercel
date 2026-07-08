@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Blender 静态网站",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["-y", "http-server", "--cors", "-p", "8000", "D:\\blender-site"],
+      "port": 8000
+    }
+  ]
+}
