@@ -97,10 +97,6 @@
     display: flex; align-items: center; justify-content: center;
     overflow: hidden;
   }
-  #page2 {
-    height: 150vh;
-    overflow: visible;
-  }
 
   /* ══════ 第一页 ══════ */
   #page1 {
@@ -683,7 +679,7 @@
 
   /* ── 整页滑动 ── */
   let cp = 0;
-  const pageHeights = [100, 150, 100]; /* 各页 vh 高度 */
+  const pageHeights = [100, 100, 100]; /* 各页 vh 高度 */
   function getOffset(i) {
     let sum = 0;
     for (let j = 0; j < i; j++) sum += pageHeights[j];
