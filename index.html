@@ -553,13 +553,6 @@
 </div>  <!-- end pagesWrap -->
 
 <script>
-  /* 公告弹窗：sessionStorage 记忆，同一次访问不再弹出 */
-  (function() {
-    if (sessionStorage.getItem('notice_closed')) {
-      var o = document.getElementById('noticeOverlay');
-      if (o) o.style.display = 'none';
-    }
-  })();
 
   const word = 'blender';
   const container = document.getElementById('letters');
@@ -786,5 +779,11 @@
   </div>
 </div>
 
+<script>
+if (sessionStorage.getItem('notice_closed')) {
+  var o = document.getElementById('noticeOverlay');
+  if (o) o.style.display = 'none';
+}
+</script>
 </body>
 </html>
