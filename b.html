@@ -314,6 +314,10 @@
 </div>
 
 <script>
+  if (sessionStorage.getItem('notice_closed')) {
+    var o = document.getElementById('noticeOverlay');
+    if (o) o.style.display = 'none';
+  }
   document.getElementById('btnModel').addEventListener('click', function() {
     var pc = document.getElementById('pageC');
     var content = document.querySelector('.page-b .content');
