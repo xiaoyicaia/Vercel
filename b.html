@@ -313,6 +313,33 @@
 </div>
 
 <script>
+document.getElementById('btnModel').addEventListener('click', function() {
+  var pc = document.getElementById('pageC');
+  var content = document.querySelector('.page-b .content');
+  if (!pc.classList.contains('show')) {
+    pc.classList.add('show');
+    content.style.display = 'none';
+  }
+});
+
+document.getElementById('z').onclick = function(e) { location.href = 'c.html'; };
+document.getElementById('z2').onclick = function(e) { location.href = 'd.html'; };
+document.getElementById('z3').onclick = function(e) { location.href = 'c.html'; };
+document.getElementById('z4').onclick = function(e) { location.href = 'c.html'; };
+document.getElementById('z5').onclick = function(e) { location.href = 'c.html'; };
+
+(function() {
+  var params = new URLSearchParams(location.search);
+  if (params.get('page') === 'c') {
+    var pc = document.getElementById('pageC');
+    var content = document.querySelector('.page-b .content');
+    pc.classList.add('show');
+    content.style.display = 'none';
+  }
+})();
+</script>
+
+<script>
 (function(){
 var today=new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate();
 if(localStorage.getItem("nd")==today)return;
