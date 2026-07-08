@@ -177,7 +177,6 @@
     .glass-frame .body-text { padding: 24px; }
     .glass-frame .footer { padding: 16px 24px; }
   }
-.notice-overlay{position:fixed;inset:0;z-index:999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);opacity:1}.notice-box{max-width:480px;width:calc(100vw - 40px);padding:36px 32px;border-radius:20px;background:rgba(255,255,255,0.08);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.12);box-shadow:0 16px 48px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.15);text-align:center;transform:scale(0.9);animation:noticeIn .4s cubic-bezier(0.34,1.56,0.64,1) forwards}@keyframes noticeIn{to{opacity:1;transform:scale(1)}}.notice-box .notice-icon{font-size:36px;margin-bottom:16px}.notice-box h3{font-size:20px;font-weight:800;color:rgba(255,255,255,0.92);margin-bottom:12px}.notice-box p{font-size:14px;line-height:1.7;color:rgba(255,255,255,0.65);margin-bottom:8px}.notice-box .notice-highlight{color:#ea7600;font-weight:700}.notice-box .notice-btn{display:inline-block;margin-top:20px;padding:10px 36px;font-size:14px;font-weight:700;color:#fff;background:rgba(234,118,0,0.85);border:none;border-radius:10px;cursor:pointer;transition:background .25s ease,transform .15s ease}.notice-box .notice-btn:hover{background:rgba(234,118,0,1);transform:scale(1.03)}
 </style>
 </head>
 <body>
@@ -230,13 +229,6 @@
     <div class="footer">
       <a class="dl-btn" href="https://pan.quark.cn/s/838eb44d7d97?pwd=qB1G" target="_blank" rel="noopener">下载 M3 工具插件</a>
     </div>
-  </div>
-</div>
-
-    <h3>网站公告</h3>
-    <p>本站为<span class="notice-highlight">免费开源</span>资源分享站，所有资源均通过夸克网盘提供下载。</p>
-    <p>请使用夸克浏览器或夸克网盘 App 获取资源。</p>
-    <button class="notice-btn" onclick="var d=new Date();localStorage.setItem('notice_dismissed',d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate());document.getElementById('noticeOverlay').style.display='none'">我知道了</button>
   </div>
 </div>
 
