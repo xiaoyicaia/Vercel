@@ -341,8 +341,8 @@ document.getElementById('z5').onclick = function(e) { location.href = 'c.html'; 
 
 <script>
 (function(){
-var _sd=sessionStorage.getItem("sd");
-if(_sd && (Date.now()-Number(_sd))<60000) return;
+var _sd=sessionStorage.getItem("nb3");
+if(_sd && (Date.now()-Number(sessionStorage.getItem("nb3")))<60000) return;
 var d=document.createElement("div");
 d.id="nb";
 d.style.cssText="position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5)";
