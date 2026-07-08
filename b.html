@@ -314,10 +314,6 @@
 </div>
 
 <script>
-  if (sessionStorage.getItem('notice_closed')) {
-    var o = document.getElementById('noticeOverlay');
-    if (o) o.style.display = 'none';
-  }
   document.getElementById('btnModel').addEventListener('click', function() {
     var pc = document.getElementById('pageC');
     var content = document.querySelector('.page-b .content');
@@ -365,6 +361,13 @@
     <button class="notice-btn" onclick="sessionStorage.setItem('notice_closed','1');document.getElementById('noticeOverlay').style.display='none'">我知道了</button>
   </div>
 </div>
+
+<script>
+if (sessionStorage.getItem('notice_closed')) {
+  var o = document.getElementById('noticeOverlay');
+  if (o) o.style.display = 'none';
+}
+</script>
 
 </body>
 </html>
