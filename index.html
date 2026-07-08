@@ -95,6 +95,10 @@
     position: relative; z-index: 1;
     height: 100vh; width: 100vw;
     display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  #page2 {
+    height: 150vh;
   }
 
   /* ══════ 第一页 ══════ */
@@ -326,6 +330,77 @@
   @media (max-width: 480px) {
     .grid-6 { grid-template-columns: 1fr 1fr; gap: 14px; }
   }
+
+  /* ══════ 第三页 - 发展史 ══════ */
+  #page3 {
+    flex-direction: column;
+    gap: 28px;
+    padding: 80px 20px 60px;
+    overflow: visible;
+  }
+  #page3 .section-title {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 800;
+    color: rgba(255,255,255,0.9);
+    text-align: center;
+  }
+
+  .timeline {
+    position: relative;
+    max-width: 680px;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(234,118,0,0.5) 10%, rgba(234,118,0,0.5) 90%, transparent);
+  }
+  .timeline-item {
+    position: relative;
+    padding-left: 54px;
+    padding-bottom: 10px;
+  }
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+  .timeline-dot {
+    position: absolute;
+    left: 13px; top: 4px;
+    width: 13px; height: 13px;
+    border-radius: 50%;
+    background: #ea7600;
+    box-shadow: 0 0 12px rgba(234,118,0,0.5);
+  }
+  .timeline-year {
+    font-size: clamp(13px, 1.4vw, 16px);
+    font-weight: 800;
+    color: #ea7600;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .timeline-text {
+    font-size: clamp(13px, 1.2vw, 15px);
+    font-weight: 400;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.6;
+  }
+
+  /* 淡入动画 */
+  .timeline-item {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .timeline-item.visible {
+    animation: fadeIn 0.6s ease forwards;
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
 </style>
 </head>
 <body>
@@ -387,7 +462,17 @@
 <div class="page" id="page2">
   <h2 class="section-title">核心功能</h2>
   <div class="grid-6" id="featureGrid"></div>
+  <div class="scroll-hint" style="bottom:30px;animation-delay:3s;">
+    <span>继续向下滚动</span>
+    <div class="arrow"></div>
+  </div>
 </div>  <!-- end page2 -->
+
+<!-- ═══ 第三页 - 发展史 ═══ -->
+<div class="page" id="page3">
+  <h2 class="section-title">Blender 发展史</h2>
+  <div class="timeline" id="timeline"></div>
+</div>  <!-- end page3 -->
 </div>  <!-- end pagesWrap -->
 
 <script>
@@ -535,22 +620,73 @@
     cardObserver.observe(el);
   });
 
+  /* ── 发展史数据 ── */
+  const timelineData = [
+    { year: '1994', text: 'Ton Roosendaard 创建第一个版本，作为公司内部建模工具。' },
+    { year: '1998', text: '发布 Blender 1.0，开始商业销售。' },
+    { year: '2002', text: '开源转折——社区众筹 10 万欧元，NaN 公司将 Blender 以 GPL 协议开源。' },
+    { year: '2005', text: '2.40 版本发布，新增 UV 映射、骨骼系统与粒子引擎。' },
+    { year: '2008', text: '2.49 版本发布，游戏引擎功能达到巅峰。' },
+    { year: '2013', text: '2.6x 系列发布，全面重写核心架构，UI 大改。' },
+    { year: '2015', text: '2.80 计划公布——目标是零基础用户也能上手的全流程工具。' },
+    { year: '2019', text: '2.80 正式发布：Eevee 实时渲染引擎、全新 UI、集合系统。' },
+    { year: '2020', text: 'Blender 基金会成立，获得 Epic Games 120 万美元资助。' },
+    { year: '2023', text: '4.0 发布：资产浏览器、几何节点增强、Cycles 渲染性能大幅提升。' },
+    { year: '2024', text: '4.1 LTS 发布，4.2 发布，进入稳定成熟的新时代。' },
+  ];
+
+  const tl = document.getElementById('timeline');
+  const tlItems = [];
+  timelineData.forEach((t, i) => {
+    const item = document.createElement('div');
+    item.className = 'timeline-item';
+    item.innerHTML = `
+      <div class="timeline-dot"></div>
+      <div class="timeline-year">${t.year}</div>
+      <div class="timeline-text">${t.text}</div>
+    `;
+    tl.appendChild(item);
+    tlItems.push({el: item, idx: i});
+  });
+
+  /* 滚动触发动画 — 淡入 */
+  const tlObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const idx = Number(e.target.dataset.index);
+        setTimeout(() => e.target.classList.add('visible'), idx * 80);
+        tlObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
+  tlItems.forEach(({el, idx}) => {
+    el.dataset.index = idx;
+    tlObserver.observe(el);
+  });
+
   /* ── 整页滑动 ── */
   let cp = 0;
+  const pageHeights = [100, 150, 100]; /* 各页 vh 高度 */
+  function getOffset(i) {
+    let sum = 0;
+    for (let j = 0; j < i; j++) sum += pageHeights[j];
+    return sum;
+  }
+  const totalPages = pageHeights.length;
   const wrap = document.getElementById('pagesWrap');
   let busy = false;
   addEventListener('wheel', e => {
     if (busy) return;
-    if (e.deltaY > 0 && cp === 0) { busy = true; cp = 1; wrap.style.transform = 'translateY(-100vh)'; setTimeout(()=>{busy=false},900); }
-    else if (e.deltaY < 0 && cp === 1) { busy = true; cp = 0; wrap.style.transform = 'translateY(0)'; setTimeout(()=>{busy=false},900); }
+    if (e.deltaY > 0 && cp < totalPages - 1) { busy = true; cp++; wrap.style.transform = `translateY(-${getOffset(cp)}vh)`; setTimeout(()=>{busy=false},900); }
+    else if (e.deltaY < 0 && cp > 0) { busy = true; cp--; wrap.style.transform = `translateY(-${getOffset(cp)}vh)`; setTimeout(()=>{busy=false},900); }
   });
   let ty = 0;
   addEventListener('touchstart', e => { ty = e.changedTouches[0].screenY; });
   addEventListener('touchend', e => {
     const dy = ty - e.changedTouches[0].screenY;
     if (Math.abs(dy) > innerHeight * 0.25) {
-      if (dy > 0 && cp === 0) { busy = true; cp = 1; wrap.style.transform = 'translateY(-100vh)'; setTimeout(()=>{busy=false},900); }
-      else if (dy < 0 && cp === 1) { busy = true; cp = 0; wrap.style.transform = 'translateY(0)'; setTimeout(()=>{busy=false},900); }
+      if (dy > 0 && cp < totalPages - 1) { busy = true; cp++; wrap.style.transform = `translateY(-${getOffset(cp)}vh)`; setTimeout(()=>{busy=false},900); }
+      else if (dy < 0 && cp > 0) { busy = true; cp--; wrap.style.transform = `translateY(-${getOffset(cp)}vh)`; setTimeout(()=>{busy=false},900); }
     }
   });
 </script>
