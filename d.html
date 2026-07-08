@@ -239,10 +239,6 @@
   </div>
 </div>
 
-<!-- 公告弹窗 -->
-<div class="notice-overlay" id="noticeOverlay">
-  <div class="notice-box">
-    <div class="notice-icon">&#128227;</div>
     <h3>网站公告</h3>
     <p>本站为<span class="notice-highlight">免费开源</span>资源分享站，所有资源均通过夸克网盘提供下载。</p>
     <p>请使用夸克浏览器或夸克网盘 App 获取资源。</p>
@@ -251,10 +247,15 @@
 </div>
 
 <script>
-var _nd=new Date();var _td=_nd.getFullYear()+'-'+(_nd.getMonth()+1)+'-'+_nd.getDate();if (localStorage.getItem('notice_dismissed')==_td) {
-  var o = document.getElementById('noticeOverlay');
-  if (o) o.style.display = 'none';
-}
+(function(){
+var today=new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate();
+if(localStorage.getItem("nd")==today)return;
+var d=document.createElement("div");
+d.id="nb";
+d.style.cssText="position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5)";
+d.innerHTML='<div style="max-width:460px;width:calc(100vw-40px);padding:32px;border-radius:20px;background:rgba(255,255,255,0.08);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.12);box-shadow:0 16px 48px rgba(0,0,0,0.4);text-align:center"><div style="font-size:32px;margin-bottom:12px">&#128227;</div><h3 style="font-size:18px;font-weight:800;color:rgba(255,255,255,0.92);margin-bottom:10px">网站公告</h3><p style="font-size:13px;line-height:1.7;color:rgba(255,255,255,0.65);margin-bottom:6px">本站为<b style="color:#ea7600">免费开源</b>资源分享站，所有资源均通过夸克网盘提供下载。</p><p style="font-size:13px;line-height:1.7;color:rgba(255,255,255,0.65)">请使用夸克浏览器或夸克网盘 App 获取资源。</p><button onclick="localStorage.setItem(\'nd\',\''+today+'\');document.getElementById(\'nb\').remove()" style="margin-top:16px;padding:10px 36px;font-size:14px;font-weight:700;color:#fff;background:rgba(234,118,0,0.85);border:none;border-radius:10px;cursor:pointer">我知道了</button></div>';
+document.body.appendChild(d);
+})();
 </script>
 </body>
 </html>
