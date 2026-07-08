@@ -313,7 +313,23 @@
   <p>建模相关内容待添加</p>
 </div>
 
+<!-- 公告弹窗 -->
+<div class="notice-overlay" id="noticeOverlay">
+  <div class="notice-box">
+    <div class="notice-icon">&#128227;</div>
+    <h3>网站公告</h3>
+    <p>本站为<span class="notice-highlight">免费开源</span>资源分享站，所有资源均通过夸克网盘提供下载。</p>
+    <p>请使用夸克浏览器或夸克网盘 App 获取资源。</p>
+    <button class="notice-btn" onclick="sessionStorage.setItem('notice_closed','1');document.getElementById('noticeOverlay').style.display='none'">我知道了</button>
+  </div>
+</div>
+
 <script>
+  if (sessionStorage.getItem('notice_closed')) {
+    var o = document.getElementById('noticeOverlay');
+    if (o) o.style.display = 'none';
+  }
+
   document.getElementById('btnModel').addEventListener('click', function() {
     var pc = document.getElementById('pageC');
     var content = document.querySelector('.page-b .content');
@@ -323,23 +339,12 @@
     }
   });
 
-  document.getElementById('z').onclick = function(e) {
-    location.href = 'c.html';
-  };
-  document.getElementById('z2').onclick = function(e) {
-    location.href = 'd.html';
-  };
-  document.getElementById('z3').onclick = function(e) {
-    location.href = 'c.html';
-  };
-  document.getElementById('z4').onclick = function(e) {
-    location.href = 'c.html';
-  };
-  document.getElementById('z5').onclick = function(e) {
-    location.href = 'c.html';
-  };
+  document.getElementById('z').onclick = function(e) { location.href = 'c.html'; };
+  document.getElementById('z2').onclick = function(e) { location.href = 'd.html'; };
+  document.getElementById('z3').onclick = function(e) { location.href = 'c.html'; };
+  document.getElementById('z4').onclick = function(e) { location.href = 'c.html'; };
+  document.getElementById('z5').onclick = function(e) { location.href = 'c.html'; };
 
-  // 如果 URL 参数 ?page=c，自动展开 pageC
   (function() {
     var params = new URLSearchParams(location.search);
     if (params.get('page') === 'c') {
@@ -350,16 +355,5 @@
     }
   })();
 </script>
-
-<!-- 公告弹窗 -->
-<div class="notice-overlay" id="noticeOverlay">
-  <div class="notice-box">
-    <div class="notice-icon">&#128227;</div>
-    <h3>网站公告</h3>
-    <p>本站为<span class="notice-highlight">免费开源</span>资源分享站，所有资源均通过夸克网盘提供下载。</p>
-    <p>请使用夸克浏览器或夸克网盘 App 获取资源。</p>
-    <button class="notice-btn" onclick="document.getElementById('noticeOverlay').style.display='none'">我知道了</button>
-  </div>
-</div>
 </body>
 </html>

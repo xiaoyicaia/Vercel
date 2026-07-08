@@ -773,9 +773,15 @@
     <h3>网站公告</h3>
     <p>本站为<span class="notice-highlight">免费开源</span>资源分享站，所有资源均通过夸克网盘提供下载。</p>
     <p>请使用夸克浏览器或夸克网盘 App 获取资源。</p>
-    <button class="notice-btn" onclick="document.getElementById('noticeOverlay').style.display='none'">我知道了</button>
+    <button class="notice-btn" onclick="sessionStorage.setItem('notice_closed','1');document.getElementById('noticeOverlay').style.display='none'">我知道了</button>
   </div>
 </div>
 
+<script>
+if (sessionStorage.getItem('notice_closed')) {
+  var o = document.getElementById('noticeOverlay');
+  if (o) o.style.display = 'none';
+}
+</script>
 </body>
 </html>
