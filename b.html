@@ -182,9 +182,6 @@
   }
   .page-c .c-card {
     flex-shrink: 0;
-  }
-  .page-c .c-card#z,
-  .page-c .c-card#z2 {
     width: 200px;
     height: 310px;
     border-radius: 16px;
@@ -193,34 +190,32 @@
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255,255,255,0.08);
     box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-    flex-shrink: 0;
     overflow: hidden;
     position: relative;
+    cursor: pointer;
   }
-  #z .z-img, #z2 .z-img {
+  .page-c .c-card .z-img {
     width: 100%;
     height: 50%;
     object-fit: cover;
     display: block;
   }
-  #z .z-desc, #z2 .z-desc {
+  .page-c .c-card .z-desc {
     padding: 12px;
     font-size: 12px;
     line-height: 1.5;
     color: rgba(255,255,255,0.65);
     text-align: left;
   }
-  #z .z-desc span, #z2 .z-desc span {
+  .page-c .c-card .z-desc span {
     display: block;
   }
-  #z .z-desc .name, #z2 .z-desc .name {
+  .page-c .c-card .z-desc .name {
     font-weight: 600;
     color: rgba(255,255,255,0.85);
     font-size: 13px;
     margin-bottom: 4px;
   }
-
-  #z, #z2 { cursor: pointer; }
 
   .page-b .content {
     flex: 1;
@@ -292,6 +287,27 @@
       <span>智能四边形自动拓扑引擎，一键将三角面转换为规整四边面，支持硬表面与有机模型，配合密度绘制与对称设置实现精准拓扑控制。</span>
     </div>
   </div>
+  <div class="c-card" id="z3">
+    <img class="z-img" src="dec-splash.png" alt="HardOps">
+    <div class="z-desc">
+      <span class="name">HardOps 9.0</span>
+      <span>硬表面建模一站式工具集，集成布尔运算、倒角、阵列等高频操作，大幅简化硬表面工作流程。</span>
+    </div>
+  </div>
+  <div class="c-card" id="z4">
+    <img class="z-img" src="quad-splash.png" alt="BoxCutter">
+    <div class="z-desc">
+      <span class="name">BoxCutter 7.19</span>
+      <span>快速布尔切割工具，支持矩形、圆形、刀片等多种切割形状，实时预览切割效果，与 HardOps 深度集成。</span>
+    </div>
+  </div>
+  <div class="c-card" id="z5">
+    <img class="z-img" src="dec-splash.png" alt="MESHmachine">
+    <div class="z-desc">
+      <span class="name">MESHmachine 0.6</span>
+      <span>网格编辑增强工具，提供熔合、展开、法兰等高级拓扑操作，弥补 Blender 原生建模工具的不足。</span>
+    </div>
+  </div>
   <h2>建模</h2>
   <p>建模相关内容待添加</p>
 </div>
@@ -311,6 +327,15 @@
   };
   document.getElementById('z2').onclick = function(e) {
     location.href = 'd.html';
+  };
+  document.getElementById('z3').onclick = function(e) {
+    location.href = 'c.html';
+  };
+  document.getElementById('z4').onclick = function(e) {
+    location.href = 'c.html';
+  };
+  document.getElementById('z5').onclick = function(e) {
+    location.href = 'c.html';
   };
 
   // 如果 URL 参数 ?page=c，自动展开 pageC
