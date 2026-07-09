@@ -700,7 +700,6 @@
 (function(){
   var referrer = document.referrer;
   var currentHost = window.location.hostname;
-  alert('referrer: ' + referrer + ' | host: ' + currentHost);
   if (referrer && referrer.indexOf(currentHost) !== -1) {
     return;
   }
