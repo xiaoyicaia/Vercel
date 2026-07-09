@@ -185,10 +185,10 @@
 <body>
 
 <nav class="navbar">
-  <a href="#">首页</a>
-  <a href="a.html?v=4">软件</a>
-  <a href="b.html?page=c&v=4">插件</a>
-  <a href="#">资产</a>
+  <a href="index.html" onclick="sessionStorage.setItem('nav_to_page','1')">首页</a>
+  <a href="a.html" onclick="sessionStorage.setItem('nav_to_page','1')">软件</a>
+  <a href="b.html?page=c&v=4" onclick="sessionStorage.setItem('nav_to_page','1')">插件</a>
+  <a href="#" onclick="sessionStorage.setItem('nav_to_page','1')">资产</a>
 </nav>
 
 <div class="bg-particles">
@@ -243,9 +243,9 @@
 
 <script>
 (function(){
-  var referrer = document.referrer;
-  var currentHost = window.location.hostname;
-  if (referrer && referrer.indexOf(currentHost) !== -1) {
+  var navFlag = sessionStorage.getItem('nav_to_page');
+  if (navFlag) {
+    sessionStorage.removeItem('nav_to_page');
     return;
   }
   var d = document.createElement("div");
