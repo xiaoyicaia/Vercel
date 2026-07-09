@@ -698,11 +698,7 @@
 
 <script>
 (function(){
-  var referrer = document.referrer;
-  var currentHost = window.location.hostname;
-  if (referrer && referrer.indexOf(currentHost) !== -1) {
-    return;
-  }
+  // 每次都显示公告（简单版本）
   var d = document.createElement("div");
   d.id = "nb";
   d.style.cssText = "position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5)";
